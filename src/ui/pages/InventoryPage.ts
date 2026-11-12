@@ -1,16 +1,20 @@
 import type { Locator } from '@playwright/test';
 import { BasePage } from '@pages/BasePage';
 
-export class InventoryPage extends BasePage {
-  get secondaryHeader(): Locator {
-    return this.page.locator('[data-test="secondary-header"]');
+export class HomePage extends BasePage {
+  get loggedInIndicator(): Locator {
+    return this.page.getByText(/Logged in as/);
   }
 
-  get swagLabsHeading(): Locator {
-    return this.page.getByText('Swag Labs');
+  get logoutLink(): Locator {
+    return this.page.getByRole('link', { name: 'Logout' });
   }
 
-  get footer(): Locator {
-    return this.page.locator('[data-test="footer"]');
+  get deleteAccountLink(): Locator {
+    return this.page.getByRole('link', { name: 'Delete Account' });
+  }
+
+  async logout(): Promise<void> {
+    await this.logoutLink.click();
   }
 }

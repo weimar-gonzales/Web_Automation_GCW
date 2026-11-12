@@ -1,11 +1,13 @@
 import { test as base, expect } from '@playwright/test';
 import { authData } from '@data/auth.data';
 import { LoginPage } from '@pages/LoginPage';
-import { InventoryPage } from '@pages/InventoryPage';
+import { HomePage } from '@pages/InventoryPage';
+import { SignupPage } from '@pages/SignupPage';
 
 type FrameworkFixtures = {
   loginPage: LoginPage;
-  authenticatedPage: InventoryPage;
+  authenticatedPage: HomePage;
+  signupPage: SignupPage;
 };
 
 export const test = base.extend<FrameworkFixtures>({
@@ -16,7 +18,10 @@ export const test = base.extend<FrameworkFixtures>({
     const loginPage = new LoginPage(page);
     await loginPage.openLogin();
     await loginPage.login(authData.username, authData.password);
-    await use(new InventoryPage(page));
+    await use(new HomePage(page));
+  },
+  signupPage: async ({ page }, use) => {
+    await use(new SignupPage(page));
   },
 });
 

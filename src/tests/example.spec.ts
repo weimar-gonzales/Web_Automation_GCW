@@ -1,18 +1,17 @@
 import { test, expect } from '@fixtures/index';
-
+import { DeleteAccountPage } from '@pages/DeleteAccountPage';
 test.describe('Edit Item test suite', { tag: ['@EditItem'] }, () => {
-  test('user can log in successfully', async ({ authenticatedPage }) => {
+  test('Test 1: user can log in successfully', async ({ authenticatedPage }) => {
     await expect(authenticatedPage.loggedInIndicator).toBeVisible();
     await expect(authenticatedPage.logoutLink).toBeVisible();
   });
 
-  test('user sees an error with invalid credentials', async ({ loginPage }) => {
+  test('Test 2: user sees an error with invalid credentials', async ({ loginPage }) => {
     await loginPage.openLogin();
     await loginPage.login('invalid-user@example.invalid', 'invalid-password');
     await expect(loginPage.errorMessage).toBeVisible();
     await expect(loginPage.errorMessage).toContainText('Your email or password is incorrect!');
   });
-
 
   test.describe('new user registration', () => {
     let createdUser: { email: string; password: string } | undefined;
@@ -26,21 +25,7 @@ test.describe('Edit Item test suite', { tag: ['@EditItem'] }, () => {
       createdUser = undefined;
 
       try {
-        const response = await request.post('/api/deleteAccount', {
-          form: {
-            email: user.email,
-            password: user.password,
-          },
-        });
-
-        if (response.ok()) {
-          return;
-        }
-
-        const responseBody = await response.text();
-        throw new Error(
-          `User cleanup failed with ${response.status()}: ${responseBody}`,
-        );
+        await new DeleteAccountPage(request).deleteAccount(user.email, user.password);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.error(`Failed to delete registered user ${user.email}: ${message}`);
@@ -51,7 +36,7 @@ test.describe('Edit Item test suite', { tag: ['@EditItem'] }, () => {
       }
     });
 
-    test('new user can register', async ({ loginPage, signupPage }) => {
+    test('Test 3: new user can register', { tag: ['@[3]'] }, async ({ loginPage, signupPage }) => {
       const uniqueEmail = `testAutomation-${Date.now()}@gmail.com`;
       const password = 'Automation123!';
 
@@ -79,4 +64,5 @@ test.describe('Edit Item test suite', { tag: ['@EditItem'] }, () => {
       await signupPage.continueToHome();
     });
   });
+
 });

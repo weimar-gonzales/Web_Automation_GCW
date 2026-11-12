@@ -78,6 +78,10 @@ export class SignupPage extends BasePage {
     return this.page.getByText('Account Created!');
   }
 
+  get getAccountCreatedMessage(): Locator {
+    return this.accountCreatedHeading.locator('..');
+  }
+
   get continueLink(): Locator {
     return this.page.getByRole('link', { name: 'Continue' });
   }

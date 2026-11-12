@@ -1,12 +1,12 @@
 import { test, expect } from '@fixtures/index';
 import { DeleteAccountPage } from '@pages/DeleteAccountPage';
 test.describe('Edit Item test suite', { tag: ['@EditItem'] }, () => {
-  test('Test 1: user can log in successfully', async ({ authenticatedPage }) => {
+  test('user can log in successfully', async ({ authenticatedPage }) => {
     await expect(authenticatedPage.loggedInIndicator).toBeVisible();
     await expect(authenticatedPage.logoutLink).toBeVisible();
   });
 
-  test('Test 2: user sees an error with invalid credentials', async ({ loginPage }) => {
+  test('user sees an error with invalid credentials', async ({ loginPage }) => {
     await loginPage.openLogin();
     await loginPage.login('invalid-user@example.invalid', 'invalid-password');
     await expect(loginPage.errorMessage).toBeVisible();
@@ -36,7 +36,7 @@ test.describe('Edit Item test suite', { tag: ['@EditItem'] }, () => {
       }
     });
 
-    test('Test 3: new user can register', { tag: ['@[3]'] }, async ({ loginPage, signupPage }) => {
+    test('new user can register', async ({ loginPage, signupPage }) => {
       const uniqueEmail = `testAutomation-${Date.now()}@gmail.com`;
       const password = 'Automation123!';
 

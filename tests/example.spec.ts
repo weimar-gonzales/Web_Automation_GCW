@@ -1,33 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@fixtures/index';
 
-test('test001 - User is able to login successfully', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.getByRole('form', { name: 'Login' }).click();
-  await page.locator('[data-test="username"]').click();
-  await page.locator('[data-test="username"]').click();
-  await page.locator('[data-test="username"]').fill('standard_user');
-  await page.locator('[data-test="password"]').click();
-  await page.locator('[data-test="password"]').fill('secret_sauce');
-  await page.locator('[data-test="login-button"]').click();
-  await expect(page.locator('[data-test="secondary-header"]')).toBeVisible();
-  await expect(page.getByText('Swag Labs')).toBeVisible();
-  await page.locator('[data-test="secondary-header"]').click();
-  await expect(page.locator('[data-test="secondary-header"]')).toContainText('ProductsName (A to Z)Name (A to Z)Name (Z to A)Price (low to high)Price (high to low)');
-  await expect(page.locator('[data-test="footer"]')).toBeVisible();
+test('test001 - User is able to login successfully', async ({ authenticatedPage }) => {
+  await expect(authenticatedPage.secondaryHeader).toBeVisible();
+  await expect(authenticatedPage.swagLabsHeading).toBeVisible();
+  await expect(authenticatedPage.secondaryHeader).toContainText('ProductsName (A to Z)Name (A to Z)Name (Z to A)Price (low to high)Price (high to low)');
+  await expect(authenticatedPage.footer).toBeVisible();
 });
 
-test('test002 - User is not able to login with wrong credentials', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.locator('[data-test="username"]').click();
-  await page.locator('[data-test="username"]').fill('Test');
-  await page.locator('[data-test="password"]').click();
-  await page.locator('[data-test="password"]').fill('TEst');
-  await page.locator('[data-test="login-button"]').click();
-    await expect(page.locator('path').first()).toBeVisible();
-  await expect(page.locator('path').nth(1)).toBeVisible();
-  await expect(page.locator('[data-test="error"]')).toBeVisible();
-  await expect(page.locator('[data-test="error"]')).toContainText('Epic sadface: Username and password do not match any user in this service');
-
+test('test002 - User is not able to login with wrong credentials', async ({ loginPage }) => {
+  await loginPage.openLogin();
+  await loginPage.login('Test', 'TEst');
+  await expect(loginPage.errorMessage).toBeVisible();
+  await expect(loginPage.errorMessage).toContainText('Epic sadface: Username and password do not match any user in this service');
 });
 
 test('test003 - New user is able to register', async ({ page }) => {

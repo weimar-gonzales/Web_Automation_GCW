@@ -14,6 +14,10 @@ export class HomePage extends BasePage {
     return this.page.getByRole('link', { name: 'Delete Account' });
   }
 
+  get signupLoginLink(): Locator {
+    return this.page.getByRole('link', { name: 'Signup / Login' });
+  }
+
   async logout(): Promise<void> {
     await this.logoutLink.click();
   }

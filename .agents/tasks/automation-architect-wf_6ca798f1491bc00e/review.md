@@ -1,0 +1,46 @@
+# Consolidated automation architecture review
+
+## Scope
+
+This document consolidates the completed `pom-architect` and `test-standards` reviews for the current Playwright + TypeScript project. Findings were deduplicated, and severities were normalized so architecture-breaking problems are `ERROR` and convention or verification problems are `WARNING`. The two reports' shared failed `npm test` verification is listed once.
+
+## Consolidated findings
+
+[pom-architect] WARNING — REQUIRED VERIFICATION; File: package.json; Line: 8; Issue: The recorded `npm test` check reported 8 failures and timed out after 180 seconds, so the completed Page Object changes lack a passing full-test verification; Fix: Resolve or document the recorded failures as unrelated and provide a completed passing validation run before approval [MANUAL]
+[test-standards] WARNING — RULE 2: KEEP SPECS IN THE TEST TREE; File: playwright.config.ts; Line: 19; Issue: Playwright discovers all current executable specs from `src/tests` even though the approved test tree is `tests/`, and `tsconfig.json` also includes `src/tests` instead of `tests`; Fix: Move the executable specs to `tests/` and align `testDir` and TypeScript includes after the required manual path decision [MANUAL]
+[test-standards] WARNING — RULE 4: USE SHARED CONFIGURATION AND DATA; File: src/data/auth.data.ts; Line: 3; Issue: The shared data module exposes only `authData` and does not provide the required `appUser` and site-specific account members needed by the specs; Fix: Add named `appUser` and site-specific account members using the approved environment and account strategy, then update the affected specs [MANUAL]
+[test-standards] WARNING — RULE 4: USE SHARED CONFIGURATION AND DATA; File: src/tests/LoginPage/LoginPage.spec.ts; Line: 8; Issue: The negative-login spec hard-codes username and password literals instead of consuming named shared test data; Fix: Define an invalid-credentials data member and reference it without changing the negative-login scenario [MANUAL]
+[test-standards] WARNING — RULE 4: USE SHARED CONFIGURATION AND DATA; File: src/tests/SignUp/SignUp.spec.ts; Line: 5; Issue: The registration spec hard-codes a fixed account email and password in executable code, so the `uniqueEmail` variable does not provide unique test data; Fix: Select or add a site-specific account strategy and reference it while preserving the required unique-account behavior [MANUAL]
+[test-standards] WARNING — RULE 4: USE SHARED CONFIGURATION AND DATA; File: src/tests/SignUp/SignUp.spec.ts; Line: 30; Issue: The cleanup request hard-codes the application host instead of using the configured base URL; Fix: Use the configured Playwright base URL with the API path after confirming the request fixture's intended base-URL behavior [MANUAL]
+[test-standards] WARNING — RULE 4: USE SHARED CONFIGURATION AND DATA; File: src/tests/DeleteUser/DeleteUser.spec.ts; Line: 12; Issue: The account-creation flow hard-codes account email and password data instead of consuming a site-specific account member; Fix: Select or add a site-specific account member and reference it without changing the account-deletion scenario [MANUAL]
+[test-standards] WARNING — RULE 5: MAKE TEST INTENT AND ISOLATION CLEAR; File: src/tests/SignUp/SignUp.spec.ts; Line: 36; Issue: The `afterAll` hook requests the per-test `page` fixture, which Playwright rejects and which the recorded run reports as a failure; Fix: Remove the invalid page close or replace it with a supported explicitly managed lifecycle after confirming the intended isolation model [MANUAL]
+[test-standards] WARNING — RULE 5: MAKE TEST INTENT AND ISOLATION CLEAR; File: src/tests/DeleteUser/DeleteUser.spec.ts; Line: 35; Issue: The `afterAll` hook requests the per-test `page` fixture, which Playwright rejects and which the recorded run reports as a failure; Fix: Remove the invalid page close or replace it with a supported explicitly managed lifecycle after confirming the intended isolation model [MANUAL]
+[test-standards] WARNING — PRESERVE APPROVED TEST EXECUTION BEHAVIOR; File: playwright.config.ts; Line: 25; Issue: The supplied diff changes CI retries from 2 to 0 without an approved test-standards requirement, removing retry recovery for transient failures; Fix: Restore `retries: process.env.CI ? 2 : 0` unless an explicit CI policy authorizes this behavior change [MANUAL]
+[test-standards] WARNING — PRESERVE APPROVED TEST SELECTION; File: src/tests/LoginPage/LoginPage.spec.ts; Line: 5; Issue: The supplied diff changes the suite tag from `@Login` to `@LoginPage`, which changes tag-based test selection without an approved requirement; Fix: Restore the existing `@Login` tag or document and approve the tag migration before changing selection behavior [MANUAL]
+
+## Safe fixes
+
+The scoped reviews found no formatting, unambiguous path-alias, unused-import, or direct-locator fixes that could be applied without a design or behavior decision. No source, configuration, data, environment, or secret files were changed during consolidation.
+
+## Changed files reviewed
+
+- `src/ui/pages/InventoryPage.ts`
+- `src/ui/pages/LoginPage.ts`
+- `package.json`
+- `playwright.config.ts`
+- `tsconfig.json`
+- `src/tests/LoginPage/LoginPage.spec.ts`
+- `src/tests/SignUp/SignUp.spec.ts`
+- `src/tests/DeleteUser/DeleteUser.spec.ts`
+- `src/data/auth.data.ts`
+
+## Validation
+
+The scoped reviews recorded `npm run typecheck` as passed and `git diff --check` as passed. The recorded `npm test` run reported 10 passed and 8 failed, then timed out after 180 seconds. No suites were rerun during consolidation.
+
+## Review sources
+
+- `.agents/tasks/automation-architect-wf_6ca798f1491bc00e/pom-review.json`
+- `.agents/tasks/automation-architect-wf_6ca798f1491bc00e/pom-review.md`
+- `.agents/tasks/automation-architect-wf_6ca798f1491bc00e/test-review.json`
+- `.agents/tasks/automation-architect-wf_6ca798f1491bc00e/test-review.md`

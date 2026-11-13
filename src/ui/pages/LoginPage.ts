@@ -35,7 +35,7 @@ export class LoginPage extends BasePage {
   }
 
   async openLogin(): Promise<void> {
-    await this.open('/login');
+    await this.navigate('/login');
   }
 
   async login(username: string, password: string): Promise<void> {

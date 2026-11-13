@@ -1,7 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 import { authData } from '@data/auth.data';
 import { LoginPage } from '@pages/LoginPage';
-import { HomePage } from '@pages/InventoryPage';
+import { HomePage } from '@pages/HomePage';
 import { SignupPage } from '@pages/SignupPage';
 
 type FrameworkFixtures = {

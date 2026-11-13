@@ -18,6 +18,22 @@ export class InventoryPage extends BasePage {
     return this.page.locator('.product-image-wrapper').filter({ hasText: productName });
   }
 
+  private get currentProductAddToCartButton(): Locator {
+    return this.page.getByRole('button', { name: /Add to cart/ });
+  }
+
+  private get continueShoppingButton(): Locator {
+    return this.page.getByRole('button', { name: 'Continue Shopping' });
+  }
+
+  private get homeLink(): Locator {
+    return this.page.getByRole('link', { name: /Home/ });
+  }
+
+  private get cartLink(): Locator {
+    return this.page.getByRole('link', { name: /Cart/ });
+  }
+
   async logout(): Promise<void> {
     await this.logoutLink.click();
   }
@@ -31,19 +47,19 @@ export class InventoryPage extends BasePage {
   }
 
   async addCurrentProductToCart(): Promise<void> {
-    await this.page.getByRole('button', { name: /Add to cart/ }).click();
+    await this.currentProductAddToCartButton.click();
   }
 
   async continueShopping(): Promise<void> {
-    await this.page.getByRole('button', { name: 'Continue Shopping' }).click();
+    await this.continueShoppingButton.click();
   }
 
   async openHome(): Promise<void> {
-    await this.page.getByRole('link', { name: /Home/ }).click();
+    await this.homeLink.click();
   }
 
   async openCart(): Promise<void> {
-    await this.page.getByRole('link', { name: /Cart/ }).click();
+    await this.cartLink.click();
   }
 }
 

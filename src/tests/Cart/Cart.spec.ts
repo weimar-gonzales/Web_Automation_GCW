@@ -14,7 +14,7 @@ test.describe('Cart page validations', { tag: ['@Cart'] }, () => {
         await expect(cartPage.proceedToCheckoutLink).toBeVisible();
     });
 
-    test('Test 6: Verify that products can be added in the cart since View product Page', async ({ authenticatedPage, page }) => {
+    test('Verify that products can be added in the cart since View product Page', async ({ authenticatedPage, page }) => {
         const inventoryPage = new InventoryPage(page);
         const cartPage = new CartPage(page);
 

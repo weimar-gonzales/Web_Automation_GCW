@@ -1,6 +1,6 @@
 import { test, expect } from '@fixtures/index';
 import { authData } from '@data/auth.data';
-import { HomePage } from '@pages/HomePage';
+import { HomePage } from '@pages/InventoryPage';
 
 test.describe('login and sing up page validations', { tag: ['@Login'] }, () => {
   test('Test 1: Verify that error message is displayed for wrong credentials', async ({ loginPage }) => {
@@ -15,10 +15,7 @@ test.describe('login and sing up page validations', { tag: ['@Login'] }, () => {
     await loginPage.login(authData.username, authData.password);
 
     const homePage = new HomePage(page);
-    await expect(homePage.loggedInIndicator).toBeVisible();
+    await expect(homePage.loggedInIndicator).toContainText('Logged in as');
   });
 
-  test.afterAll(async ({ page }) => {
-    await page.close();
-  });
 });

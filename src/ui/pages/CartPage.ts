@@ -3,7 +3,7 @@ import { BasePage } from '@pages/BasePage';
 
 export class CartPage extends BasePage {
   productRow(productName: string): Locator {
-    return this.page.getByRole('row', { name: new RegExp(`Product Image ${productName} Women`) });
+    return this.page.getByRole('row').filter({ hasText: productName });
   }
 
   get proceedToCheckoutLink(): Locator {
